@@ -1,0 +1,7 @@
+cloud:
+  gateway:
+    discovery:
+      locator:
+        enabled: true
+server:
+  port: 8222
