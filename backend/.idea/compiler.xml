@@ -6,24 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="api-gateway" />
         <module name="config-server" />
-      </profile>
-      <profile name="Annotation profile for gateway" enabled="true">
-        <sourceOutputDir name="../gateway/target/generated-sources/annotations" />
-        <sourceTestOutputDir name="../gateway/target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="gateway" />
-      </profile>
-      <profile name="Annotation profile for discovery" enabled="true">
-        <sourceOutputDir name="../discovery/target/generated-sources/annotations" />
-        <sourceTestOutputDir name="../discovery/target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="discovery" />
+        <module name="discovery-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="api-gateway" target="17" />
-      <module name="discovery-server" target="17" />
+      <module name="discovery" target="17" />
+      <module name="gateway" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
