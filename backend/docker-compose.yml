@@ -1,6 +1,6 @@
 services:
   postgres:
-    container_name: ms_pg_sql
+    container_name: cf_pg_sql
     image: postgres:latest
     environment:
       POSTGRES_USER: admin
@@ -11,12 +11,12 @@ services:
     ports:
       - 5432:5432
     networks:
-      - microservices-net
+      - cineflicks-net
     restart: unless-stopped
 
 
   pgadmin:
-    container_name: ms_pgadmin
+    container_name: cf_pgadmin
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin@pgadmin.org}
@@ -27,12 +27,12 @@ services:
     ports:
       - 5050:80
     networks:
-      - microservices-net
+      - cineflicks-net
     restart: unless-stopped
 
 
   cassandra:
-    container_name: ms_cassandra
+    container_name: cf_cassandra
     image: cassandra:latest
     ports:
       - 9042:9042
@@ -44,22 +44,31 @@ services:
 
 
   datastax_studio:
-    container_name: ms_datastax_studio
+    container_name: cf_datastax_studio
     image: datastax/dse-studio
     ports:
       - 9091:9091
     environment:
-      DSE_HOST: ms_cassandra
+      DSE_HOST: cf_cassandra
       DSE_PORT: 9042
       DS_LICENSE: accept
     networks:
-      - microservices-net
+      - cineflicks-net
     restart: unless-stopped
 
 
+  smtp:
+    container_name: cf_smtp
+    image: namshi/smtp
+    ports:
+      - 25:25
+    environment:
+      MAIL_NAME: gmail.com
+      SMTP_USER: engineers.newgeneration@gmail.com
+      SMTP_PASS: qxzhhqontwiwjmnn
 
 networks:
-  microservices-net:
+  cineflicks-net:
     driver: bridge
 
 volumes:
