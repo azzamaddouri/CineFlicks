@@ -11,6 +11,3 @@ spring:
           uri: lb:http://user-service
           predicates:
             - Path=/api/v1/users/**
-  logging:
-    level:
-      org.springframework.cloud.gateway: DEBUG

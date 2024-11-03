@@ -5,5 +5,9 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface TokenPersistenceMapper {
+
+    Token toToken(TokenEntity entity);
+
     TokenEntity toTokenEntity(Token token);
 }
+

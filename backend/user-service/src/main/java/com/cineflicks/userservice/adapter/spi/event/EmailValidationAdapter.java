@@ -1,10 +1,9 @@
 package com.cineflicks.userservice.adapter.spi.event;
 
-import com.cineflicks.userservice.adapter.spi.persistence.mapper.TokenPersistenceMapper;
+import com.cineflicks.userservice.adapter.spi.persistence.entity.TokenEntity;
 import com.cineflicks.userservice.adapter.spi.persistence.mapper.UserPersistenceMapper;
 import com.cineflicks.userservice.adapter.spi.persistence.repository.TokenRepository;
 import com.cineflicks.userservice.application.ports.spi.event.EmailValidationPort;
-import com.cineflicks.userservice.domain.model.Token;
 import com.cineflicks.userservice.domain.model.User;
 import com.cineflicks.userservice.utils.EmailTemplateName;
 import jakarta.mail.MessagingException;
@@ -33,7 +32,6 @@ public class EmailValidationAdapter implements EmailValidationPort {
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
     private final UserPersistenceMapper userPersistenceMapper;
-    private final TokenPersistenceMapper tokenPersistenceMapper;
     private final TokenRepository tokenRepository;
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
@@ -54,13 +52,12 @@ public class EmailValidationAdapter implements EmailValidationPort {
 
     private String generateAndActivationToken(User user) {
         String generatedToken = generateActivationCode(6);
-        var token = Token.builder()
+        tokenRepository.save(TokenEntity.builder()
                 .token(generatedToken)
                 .createdAt(LocalDateTime.now())
                 .expiredAt(LocalDateTime.now().plusMinutes(15))
-                .user(user)
-                .build();
-        tokenRepository.save(tokenPersistenceMapper.toTokenEntity(token));
+                .user(userPersistenceMapper.toUserEntity(user))
+                .build());
         return generatedToken;
     }
 

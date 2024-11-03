@@ -1,7 +1,9 @@
 package com.cineflicks.userservice.adapter.api.rest;
 
 import com.cineflicks.userservice.adapter.api.rest.mapper.UserRestMapper;
+import com.cineflicks.userservice.adapter.api.rest.model.request.AuthenticationRequest;
 import com.cineflicks.userservice.adapter.api.rest.model.request.RegistrationRequest;
+import com.cineflicks.userservice.adapter.api.rest.model.response.AuthenticationResponse;
 import com.cineflicks.userservice.adapter.api.rest.model.response.UserResponse;
 import com.cineflicks.userservice.application.ports.api.UserServicePort;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,4 +28,15 @@ public class UserRestAdapter {
                         servicePort.register(restMapper.toUser(request))));
     }
 
+
+    @PostMapping("/authentication")
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request){
+        return ResponseEntity.ok(restMapper.toAuthenticationResponse(
+                        servicePort.authenticate(restMapper.toUserr(request))));
+    }
+
+    @GetMapping("/activate-account")
+    public void confirm(@RequestParam String token){
+        servicePort.activeAccount(token);
+    }
 }

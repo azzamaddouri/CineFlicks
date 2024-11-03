@@ -22,7 +22,7 @@ public class TokenEntity {
     private LocalDateTime expiredAt;
     private LocalDateTime validatedAt;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 }

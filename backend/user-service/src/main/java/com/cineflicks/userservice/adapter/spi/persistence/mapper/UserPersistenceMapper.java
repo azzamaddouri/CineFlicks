@@ -7,8 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface UserPersistenceMapper {
 
-    UserEntity toUserEntity(User user);
-
     User toUser(UserEntity entity);
 
+    UserEntity toUserEntity(User user);
 }
