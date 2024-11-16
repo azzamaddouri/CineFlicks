@@ -1,7 +1,7 @@
 package com.cineflicks.userservice;
 
-import com.cineflicks.userservice.adapter.spi.persistence.entity.RoleEntity;
-import com.cineflicks.userservice.adapter.spi.persistence.repository.RoleRepository;
+import com.cineflicks.userservice.adapter.outbound.persistence.entity.RoleEntity;
+import com.cineflicks.userservice.adapter.outbound.persistence.repository.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

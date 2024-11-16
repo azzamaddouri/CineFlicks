@@ -8,3 +8,11 @@ spring:
   cloud:
     config:
       override-system-properties: false
+
+application:
+  security:
+    jwt:
+      secret-key: 5IoXOaEXoVWjqTKXyNm0j6lFfC1bHOa26GL+8dq03xs=
+  description: It's a Netflix-like application with additional features
+  license: API Licence
+  version: 1.0

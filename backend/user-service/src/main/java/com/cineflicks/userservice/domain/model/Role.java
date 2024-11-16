@@ -11,11 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
-
-    private Long id;
-    private String name;
-    private List<Long> roleIds;
-    private LocalDateTime createdDate;
+    private String id;
+    private LocalDateTime createdAt;
     private LocalDateTime lastModifiedDate;
-
+    private String name;
 }

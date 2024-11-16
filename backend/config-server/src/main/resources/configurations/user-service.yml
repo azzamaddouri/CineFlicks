@@ -1,17 +1,6 @@
 spring:
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: engineers.newgeneration@gmail.com
-    password: qxzhhqontwiwjmnn
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
   datasource:
-    url: jdbc:postgresql://0.0.0.0:5432/user
+    url: jdbc:postgresql://localhost:5432/user
     username: admin
     password: root
     driver-class-name: org.postgresql.Driver
@@ -30,12 +19,3 @@ spring:
 
 server:
   port: 8090
-
-application:
-  security:
-    jwt:
-      secret-key: 5IoXOaEXoVWjqTKXyNm0j6lFfC1bHOa26GL+8dq03xs=
-      expiration: 8640000
-  mailing:
-    frontend:
-      activation-url: http://localhost:8081/activate-account

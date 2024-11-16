@@ -1,9 +1,7 @@
 package com.cineflicks.userservice.application.service;
 
-import com.cineflicks.userservice.application.ports.api.UserServicePort;
-import com.cineflicks.userservice.application.ports.spi.event.EmailValidationPort;
-import com.cineflicks.userservice.application.ports.spi.persistence.UserPersistencePort;
-import com.cineflicks.userservice.domain.model.Token;
+import com.cineflicks.userservice.application.ports.inbound.web.rest.UserServicePort;
+import com.cineflicks.userservice.application.ports.outbound.persistence.UserPersistencePort;
 import com.cineflicks.userservice.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,33 +10,25 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService implements UserServicePort {
 
-    private final UserPersistencePort userPersistencePort;
-    private final EmailValidationPort emailValidationPort;
+    private final UserPersistencePort persistencePort;
 
     @Override
-    public User register(User user) {
-        User savedUser = userPersistencePort.register(user);
-        emailValidationPort.sendValidationEmail(savedUser);
-        return savedUser;
+    public User save(User user) {
+       return persistencePort.save(user);
     }
 
     @Override
-    public String authenticate(User user) {
-        return userPersistencePort.authenticate(user);
+    public User getUserByEmail(String email) {
+        return persistencePort.getUserByEmail(email);
     }
 
     @Override
-    public void activeAccount(String token) {
-
-        Token savedToken = userPersistencePort.validateTokenExists(token);
-
-        if (userPersistencePort.isTokenExpired(savedToken)) {
-            emailValidationPort.sendValidationEmail(savedToken.getUser());
-            throw new RuntimeException("Activation token has expired. A new token has been sent to the same email address.");
-        }
-
-        userPersistencePort.enable(savedToken.getUser().getId());
-        userPersistencePort.validateToken(savedToken);
+    public User getUserById(String id) {
+        return persistencePort.getUserById(id);
     }
 
+    @Override
+    public void enable(User user) {
+        persistencePort.enable(user);
+    }
 }
