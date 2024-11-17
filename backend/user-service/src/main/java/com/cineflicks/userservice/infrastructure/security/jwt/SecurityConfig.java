@@ -3,7 +3,6 @@ package com.cineflicks.userservice.infrastructure.security.jwt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,8 +29,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(
                                 "/api/v1/user/save",
-                                "/api/v1/user/getUserById/**",
-                                "/api/v1/user/getUserByEmail/**",
+                                "/api/v1/user/getUserById/{id}",
+                                "/api/v1/user/getUserByEmail/{email}",
+                                "/api/v1/user/enable",
                                 "/v2/api-docs",
                                 "/v3/api-docs",
                                 "/v3/api-docs/**",

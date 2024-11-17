@@ -10,7 +10,6 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AuthRestMapper {
-
     UserDTO toUserDTO(RegisterRequest request);
 
     RegisterResponse toRegisterResponse(UserDTO user);
@@ -22,6 +21,4 @@ public interface AuthRestMapper {
                 .token(token)
                 .build();
     }
-
-
 }

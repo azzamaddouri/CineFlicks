@@ -13,9 +13,6 @@ import java.time.LocalDate;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDetailsEntity {
-
     private String firstname;
     private String lastname;
-    private LocalDate dateOfBirth;
-
 }

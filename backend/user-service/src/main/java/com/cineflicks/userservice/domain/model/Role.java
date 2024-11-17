@@ -3,16 +3,14 @@ package com.cineflicks.userservice.domain.model;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
     private String id;
+    private String name;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedDate;
-    private String name;
 }

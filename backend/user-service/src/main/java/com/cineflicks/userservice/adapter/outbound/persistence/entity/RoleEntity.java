@@ -9,7 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,17 +20,17 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "role")
 public class RoleEntity {
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @UuidGenerator
+    private String id;
 
     @Column(unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
-    private List<UserEntity> users;
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @UuidGenerator
-    private String id;
+    private Set<UserEntity> users;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

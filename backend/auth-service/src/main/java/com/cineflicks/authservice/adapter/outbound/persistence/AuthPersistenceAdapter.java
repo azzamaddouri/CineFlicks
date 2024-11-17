@@ -34,17 +34,29 @@ import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE
 @RequiredArgsConstructor
 public class AuthPersistenceAdapter implements AuthPersistencePort {
 
+    private final AuthPersistenceMapper persistenceMapper;
+    private final TokenRepository tokenRepository;
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
-    private final AuthPersistenceMapper persistenceMapper;
-    private final TokenRepository tokenRepository;
 
+    @Override
+    public void sendValidationEmail(UserDTO user) {
+        try {
+            sendEmail(
+                    user.getEmail(),
+                    user.fullName(),
+                    activationUrl,
+                    generateAndActivationToken(user));
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     @Override
@@ -56,21 +68,6 @@ public class AuthPersistenceAdapter implements AuthPersistencePort {
         return jwtService.generateToken(user.getEmail());
     }
 
-
-    @Override
-    public void sendValidationEmail(UserDTO user) {
-        var newToken = generateAndActivationToken(user);
-        try {
-            sendEmail(
-                    user.getEmail(),
-                    user.fullName(),
-                    activationUrl,
-                    newToken
-            );
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     private String generateAndActivationToken(UserDTO user) {
         String generatedToken = generateActivationCode(6);
@@ -93,7 +90,6 @@ public class AuthPersistenceAdapter implements AuthPersistencePort {
         }
         return codeBuilder.toString();
     }
-
 
     @Async
     private void sendEmail(

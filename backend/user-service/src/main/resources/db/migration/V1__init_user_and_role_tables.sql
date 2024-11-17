@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS _user (
     enabled BOOLEAN DEFAULT TRUE,
     firstname VARCHAR(255),
     lastname VARCHAR(255),
-    date_of_birth DATE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_modified_date TIMESTAMPTZ DEFAULT NULL
 );

@@ -30,15 +30,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         if (request.getServletPath().contains("/api/v1/user/save")
-                || request.getServletPath().contains("/api/v1/user/getUserById/**")
-                || request.getServletPath().contains("/api/v1/user/getUserByEmail/**")){
+                || request.getServletPath().contains("/api/v1/user/getUserById/{id}")
+                || request.getServletPath().contains("/api/v1/user/getUserByEmail/{email}")
+                || request.getServletPath().contains("/api/v1/user/enable")){
             filterChain.doFilter(request, response);
             return;
         }
         try {
             String token = request.getHeader("Authorization");
             if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
-                token = token.substring(7).trim();  // Remove 'Bearer ' and trim spaces
+                token = token.substring(7).trim();
                 System.out.println("Token to Verify: '" + token + "'");
                 Claims claims = jwtUtil.extractAllClaims(token);
 

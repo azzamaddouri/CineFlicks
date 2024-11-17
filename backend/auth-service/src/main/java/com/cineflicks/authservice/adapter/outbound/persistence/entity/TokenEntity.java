@@ -13,16 +13,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "token")
 public class TokenEntity {
-
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
     private String id;
-
+    @Column(unique = true)
     private String token;
     private LocalDateTime createdAt;
     private LocalDateTime expiredAt;
     private LocalDateTime validatedAt;
+    @Column(nullable = false)
     private String userId;
-
 }

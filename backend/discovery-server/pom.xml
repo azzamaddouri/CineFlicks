@@ -11,8 +11,8 @@
 	<groupId>com.cineflicks</groupId>
 	<artifactId>discovery-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>discovery</name>
-	<description>config-server</description>
+	<name>discovery-server</name>
+	<description>Eureka Server</description>
 	<url/>
 	<licenses>
 		<license/>

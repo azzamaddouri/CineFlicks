@@ -16,12 +16,10 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Configuration
 public class BeansConfig {
 
-
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
-
 
     @Bean
     public CorsFilter corsFilter(){

@@ -8,7 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -25,13 +25,6 @@ public class UserEntity {
     @UuidGenerator
     private String id;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(insertable = false)
-    private LocalDateTime lastModifiedDate;
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -48,12 +41,17 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<RoleEntity> roles;
+    private Set<RoleEntity> roles;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime lastModifiedDate;
 
     @Embedded
     private UserDetailsEntity userDetails;
-
-
-
 }
 

@@ -1,8 +1,8 @@
 package com.cineflicks.authservice.adapter.outbound.web.rest;
 
-import com.cineflicks.authservice.adapter.inbound.web.rest.model.response.RequestResponse;
+import com.cineflicks.authservice.adapter.outbound.web.rest.mapper.UserServiceMapper;
 import com.cineflicks.authservice.adapter.outbound.web.rest.model.request.EnableUserRequest;
-import com.cineflicks.authservice.adapter.inbound.web.rest.model.request.RegisterRequest;
+import com.cineflicks.authservice.adapter.outbound.web.rest.model.response.RequestResponse;
 import com.cineflicks.authservice.adapter.outbound.web.rest.model.response.UserResponse;
 import com.cineflicks.authservice.application.ports.outbound.web.rest.UserServicePort;
 import com.cineflicks.authservice.domain.model.UserDTO;
@@ -29,147 +29,85 @@ public class UserServiceAdapter implements UserServicePort, UserServiceClient {
     @Value("${application.config.user-url}")
     private String url;
 
+    private final UserServiceMapper serviceMapper;
+
 
     @Override
     public UserDTO save(UserDTO user) {
-        // Create a RegisterRequest object from the UserDTO
-        RegisterRequest request = RegisterRequest.builder()
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .build();
-
-        // Use ParameterizedTypeReference for the response
         ResponseEntity<RequestResponse<UserResponse>> responseEntity = restTemplate.exchange(
                 url + "/save",
                 HttpMethod.POST,
-                new HttpEntity<>(request),
-                new ParameterizedTypeReference<RequestResponse<UserResponse>>() {}
-        );
+                new HttpEntity<>(serviceMapper.toRegisterRequest(user)),
+                new ParameterizedTypeReference<>() {});
 
-        // Get the response body
         RequestResponse<UserResponse> response = responseEntity.getBody();
-        System.out.println("Response from User Service: " + response);
 
-        // Check if the response is successful
-        if (response != null && "success".equals(response.getStatus())) {
-            UserResponse userResponse = response.getData();
-            return UserDTO.builder()
-                    .id(userResponse.getId())
-                    .email(userResponse.getEmail())
-                    .build();
-        }
-        return null; // or handle error appropriately
-    }
-
-
-
-
-
-
-    @Override
-    public UserDTO getUserByEmail(String email) {
-        Map<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("email", email);
-
-        // Create an HttpEntity with no body and no headers (can add headers if necessary)
-        HttpEntity<?> entity = new HttpEntity<>(null);
-
-        // Send the GET request using restTemplate.exchange
-        ResponseEntity<RequestResponse<UserResponse>> responseEntity = restTemplate.exchange(
-                url + "/getUserByEmail/{email}",
-                HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<RequestResponse<UserResponse>>() {},
-                uriVariables
-        );
-
-        // Get the response body
-        RequestResponse<UserResponse> response = responseEntity.getBody();
-        System.out.println("Response from User Service: " + response);
-
-        // Check if the response is successful
-        if (response != null && "success".equals(response.getStatus())) {
-            UserResponse userResponse = response.getData();
-            return UserDTO.builder()
-                    .id(userResponse.getId())
-                    .email(userResponse.getEmail())
-                    .password(userResponse.getPassword())
-                    .enabled(userResponse.getEnabled())
-                    .roles(userResponse.getRoles())
-                    .build();
+        if (response == null || response.getData() == null) {
+            throw new RuntimeException("Failed to save the user: no valid response received.");
         }
 
-        return null;
+        return serviceMapper.toUserDTO(response.getData());
     }
-
-
 
     @Override
     public UserDTO getUserById(String userId) {
         Map<String, String> uriVariables = new HashMap<>();
         uriVariables.put("id", userId);
 
-        // Create an HttpEntity with no body and no headers (can add headers if necessary)
-        HttpEntity<?> entity = new HttpEntity<>(null);
-
-        // Send the GET request using restTemplate.exchange
         ResponseEntity<RequestResponse<UserResponse>> responseEntity = restTemplate.exchange(
                 url + "/getUserById/{id}",
                 HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<RequestResponse<UserResponse>>() {},
+                new HttpEntity<>(null),
+                new ParameterizedTypeReference<>() {},
                 uriVariables
         );
 
-        // Get the response body
         RequestResponse<UserResponse> response = responseEntity.getBody();
-        System.out.println("Response from User Service: " + response);
-
-        // Check if the response is successful
-        if (response != null && "success".equals(response.getStatus())) {
-            UserResponse userResponse = response.getData();
-            return UserDTO.builder()
-                    .id(userResponse.getId())
-                    .firstname(userResponse.getFirstname())
-                    .lastname(userResponse.getLastname())
-                    .email(userResponse.getEmail())
-                    .enabled(userResponse.getEnabled())
-                    .build();
+        if (response == null || response.getData() == null) {
+            throw new RuntimeException("Failed to retrieve the user by ID: no valid response received.");
         }
 
-        return null;
+        return serviceMapper.toUserDTO(response.getData());
     }
-
 
     @Override
     public void enable(String userId, Boolean enabled) {
-        // Create EnableUserRequest with userId and enabled status
-        EnableUserRequest request = EnableUserRequest.builder()
-                .id(userId)
-                .enabled(enabled)
-                .build();
-
-        // Send PUT request with the request body
         ResponseEntity<RequestResponse<UserResponse>> responseEntity = restTemplate.exchange(
                 url + "/enable",
                 HttpMethod.PUT,
-                new HttpEntity<>(request),  // Pass the request object as the body
-                new ParameterizedTypeReference<RequestResponse<UserResponse>>() {}  // Use UserResponse instead of Any
-        );
+                new HttpEntity<>(EnableUserRequest.builder()
+                                .id(userId)
+                                .enabled(enabled)
+                                .build()),
+                new ParameterizedTypeReference<>() {});
 
-        // Get the response body
         RequestResponse<UserResponse> response = responseEntity.getBody();
-        System.out.println("Response from User Service: " + response);
 
-        // Handle the response if needed
-        if (response != null && "success".equals(response.getStatus())) {
-            // Success handling if needed
-        } else {
-            // Error handling if needed
+        if (response == null || response.getData() == null) {
+            throw new RuntimeException("Failed to enable the user: no valid response received.");
         }
     }
 
+    @Override
+    public UserDTO getUserByEmail(String email) {
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put("email", email);
+
+        ResponseEntity<RequestResponse<UserResponse>> responseEntity = restTemplate.exchange(
+                url + "/getUserByEmail/{email}",
+                HttpMethod.GET,
+                new HttpEntity<>(null),
+                new ParameterizedTypeReference<>() {},
+                uriVariables
+        );
+
+        RequestResponse<UserResponse> response = responseEntity.getBody();
+
+        if (response == null || response.getData() == null) {
+            throw new RuntimeException("Failed to retrieve the user by email: no valid response received.");
+        }
+
+        return serviceMapper.toUserDTO(response.getData());
+    }
 
 }

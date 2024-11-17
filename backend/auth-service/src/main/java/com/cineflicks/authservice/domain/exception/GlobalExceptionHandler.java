@@ -1,6 +1,7 @@
 package com.cineflicks.authservice.domain.exception;
 
 import jakarta.mail.MessagingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -16,6 +17,7 @@ import static com.cineflicks.authservice.domain.exception.BusinessErrorCodes.*;
 import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(LockedException.class)
@@ -69,13 +71,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleException(MethodArgumentNotValidException exp){
-        Set<String> errors= new HashSet<>();
-        exp.getBindingResult().getAllErrors()
-                .forEach(error -> {
-                    var errorMessage = error.getDefaultMessage();
-                    errors.add(errorMessage);
-                });
+    public ResponseEntity<ExceptionResponse> handleValidationException(MethodArgumentNotValidException exp){
+        Set<String> errors = new HashSet<>();
+
+        exp.getBindingResult().getFieldErrors().forEach(error -> {
+            String fieldName = error.getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.add(fieldName + ": " + errorMessage);
+        });
+
         return ResponseEntity
                 .status(BAD_REQUEST)
                 .body(
@@ -86,16 +90,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> handleException(Exception exp){
-        exp.printStackTrace();
+    public ResponseEntity<ExceptionResponse> handleGeneralException(Exception exp){
+        log.error("Unhandled exception occurred: {}", exp.getMessage(), exp);
         return ResponseEntity
                 .status(INTERNAL_SERVER_ERROR)
                 .body(
                         ExceptionResponse.builder()
-                                .businessErrorDescription("Internal error, contact the admin. ")
                                 .error(exp.getMessage())
                                 .build()
                 );
     }
-
 }

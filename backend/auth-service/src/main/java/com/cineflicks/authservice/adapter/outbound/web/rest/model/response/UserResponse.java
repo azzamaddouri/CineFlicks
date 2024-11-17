@@ -4,7 +4,8 @@ package com.cineflicks.authservice.adapter.outbound.web.rest.model.response;
 import com.cineflicks.authservice.domain.model.Role;
 import lombok.Data;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 public class UserResponse {
@@ -14,7 +15,9 @@ public class UserResponse {
     private String username;
     private String email;
     private String password;
+    private Boolean accountLocked;
     private Boolean enabled;
-    private List<Role> roles;
+    private Set<Role> roles;
+    private LocalDateTime createdAt;
 }
 

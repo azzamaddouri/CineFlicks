@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenAPIConfig {
     @Bean
-    public OpenAPI authServiceAPI(@Value("${application.title}") String title,
+    public OpenAPI openAPI(@Value("${application.title}") String title,
                            @Value("${application.description}") String description,
                            @Value("${application.version}") String version,
                            @Value("${application.license}") String license) {

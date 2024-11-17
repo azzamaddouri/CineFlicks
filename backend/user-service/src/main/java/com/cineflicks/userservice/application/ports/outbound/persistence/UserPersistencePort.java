@@ -10,6 +10,6 @@ public interface UserPersistencePort {
 
     User getUserById(String id);
 
-    void enable(User user);
+    User enable(User user);
 
 }

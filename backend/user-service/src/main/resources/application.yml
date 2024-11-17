@@ -10,5 +10,5 @@ springdoc:
   api-docs:
     path: /v3/api-docs
 
-
-
+application:
+  title: User Service API

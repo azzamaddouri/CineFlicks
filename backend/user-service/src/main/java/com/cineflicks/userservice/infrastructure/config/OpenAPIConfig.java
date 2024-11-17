@@ -1,25 +1,36 @@
 package com.cineflicks.userservice.infrastructure.config;
 
-import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenAPIConfig {
-
     @Bean
-    public OpenAPI userServiceAPI(){
-        return new OpenAPI()
-                .info(new Info().title("User Service API")
-                        .description("This is the REST API for User Service")
-                        .version("v0.0.1")
-                        .license(new License().name("Apache 2.0")))
-                .externalDocs(new ExternalDocumentation()
-                        .description("You can refer to the User Service Wiki Documentation")
-                        .url("https://user-service-dummy-url.com/docs"));
+    public OpenAPI openAPI(@Value("${application.title}") String title,
+                           @Value("${application.description}") String description,
+                           @Value("${application.version}") String version,
+                           @Value("${application.license}") String license) {
+        return new OpenAPI().addSecurityItem(new SecurityRequirement()
+                        .addList("Bearer Authentication"))
+                .components(new Components().addSecuritySchemes
+                        ("Bearer Authentication", createAPIKeyScheme()))
+                .info(new Info()
+                        .title(title)
+                        .description(description)
+                        .version(version)
+                        .license(new License().name(license)));
+    }
 
+    private SecurityScheme createAPIKeyScheme() {
+        return new SecurityScheme().type(SecurityScheme.Type.HTTP)
+                .bearerFormat("JWT")
+                .scheme("bearer");
     }
 }

@@ -1,6 +1,6 @@
 package com.cineflicks.userservice.application.service;
 
-import com.cineflicks.userservice.application.ports.inbound.web.rest.UserServicePort;
+import com.cineflicks.userservice.application.ports.inbound.UserServicePort;
 import com.cineflicks.userservice.application.ports.outbound.persistence.UserPersistencePort;
 import com.cineflicks.userservice.domain.model.User;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class UserService implements UserServicePort {
     }
 
     @Override
-    public void enable(User user) {
-        persistencePort.enable(user);
+    public User enable(User user) {
+        return persistencePort.enable(user);
     }
 }

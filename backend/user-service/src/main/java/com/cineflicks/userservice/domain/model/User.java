@@ -4,7 +4,7 @@ import jakarta.persistence.Embedded;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -14,14 +14,14 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
     private String id;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedDate;
     private String username;
     private String email;
     private String password;
     private boolean accountLocked;
     private boolean enabled;
-    private List<Role> roles;
+    private Set<Role> roles;
+    private LocalDateTime createdAt;
+    private LocalDateTime lastModifiedDate;
 
     @Embedded
     private UserDetails userDetails;

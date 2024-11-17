@@ -34,8 +34,7 @@ public class JwtService {
 
     private String createToken(
             Map<String, Object> claims,
-            UserDetails userDetails
-    ) {
+            UserDetails userDetails) {
         var authorities = userDetails.getAuthorities()
                 .stream().
                 map(GrantedAuthority::getAuthority)
@@ -55,5 +54,4 @@ public class JwtService {
         System.out.println("Key Length (bits): " + (keyBytes.length * 8));
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
 }

@@ -9,12 +9,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Token {
-
     private String id;
     private String token;
     private LocalDateTime createdAt;
     private LocalDateTime expiredAt;
     private LocalDateTime validatedAt;
     private String userId;
-
 }

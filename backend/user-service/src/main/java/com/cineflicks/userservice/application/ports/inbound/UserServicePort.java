@@ -1,4 +1,4 @@
-package com.cineflicks.userservice.application.ports.inbound.web.rest;
+package com.cineflicks.userservice.application.ports.inbound;
 
 
 import com.cineflicks.userservice.domain.model.User;
@@ -11,6 +11,6 @@ public interface UserServicePort {
 
     User getUserById(String id);
 
-    void enable(User user);
+    User enable(User user);
 
 }
