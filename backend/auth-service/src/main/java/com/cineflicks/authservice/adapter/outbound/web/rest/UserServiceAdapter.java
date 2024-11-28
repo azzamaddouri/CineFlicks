@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -39,14 +40,7 @@ public class UserServiceAdapter implements UserServicePort, UserServiceClient {
                 HttpMethod.POST,
                 new HttpEntity<>(serviceMapper.toRegisterRequest(user)),
                 new ParameterizedTypeReference<>() {});
-
-        RequestResponse<UserResponse> response = responseEntity.getBody();
-
-        if (response == null || response.getData() == null) {
-            throw new RuntimeException("Failed to save the user: no valid response received.");
-        }
-
-        return serviceMapper.toUserDTO(response.getData());
+        return serviceMapper.toUserDTO(Objects.requireNonNull(responseEntity.getBody()).getData());
     }
 
     @Override
@@ -59,15 +53,8 @@ public class UserServiceAdapter implements UserServicePort, UserServiceClient {
                 HttpMethod.GET,
                 new HttpEntity<>(null),
                 new ParameterizedTypeReference<>() {},
-                uriVariables
-        );
-
-        RequestResponse<UserResponse> response = responseEntity.getBody();
-        if (response == null || response.getData() == null) {
-            throw new RuntimeException("Failed to retrieve the user by ID: no valid response received.");
-        }
-
-        return serviceMapper.toUserDTO(response.getData());
+                uriVariables);
+        return serviceMapper.toUserDTO(Objects.requireNonNull(responseEntity.getBody()).getData());
     }
 
     @Override
@@ -76,16 +63,10 @@ public class UserServiceAdapter implements UserServicePort, UserServiceClient {
                 url + "/enable",
                 HttpMethod.PUT,
                 new HttpEntity<>(EnableUserRequest.builder()
-                                .id(userId)
-                                .enabled(enabled)
-                                .build()),
+                        .id(userId)
+                        .enabled(enabled)
+                        .build()),
                 new ParameterizedTypeReference<>() {});
-
-        RequestResponse<UserResponse> response = responseEntity.getBody();
-
-        if (response == null || response.getData() == null) {
-            throw new RuntimeException("Failed to enable the user: no valid response received.");
-        }
     }
 
     @Override
@@ -98,16 +79,8 @@ public class UserServiceAdapter implements UserServicePort, UserServiceClient {
                 HttpMethod.GET,
                 new HttpEntity<>(null),
                 new ParameterizedTypeReference<>() {},
-                uriVariables
-        );
+                uriVariables);
 
-        RequestResponse<UserResponse> response = responseEntity.getBody();
-
-        if (response == null || response.getData() == null) {
-            throw new RuntimeException("Failed to retrieve the user by email: no valid response received.");
-        }
-
-        return serviceMapper.toUserDTO(response.getData());
+            return serviceMapper.toUserDTO(Objects.requireNonNull(responseEntity.getBody()).getData());
     }
-
 }

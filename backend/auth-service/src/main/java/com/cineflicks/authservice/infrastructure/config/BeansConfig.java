@@ -1,5 +1,6 @@
 package com.cineflicks.authservice.infrastructure.config;
 
+import com.cineflicks.authservice.domain.exception.UserServiceResponseErrorHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -13,11 +14,6 @@ import java.util.Collections;
 
 @Configuration
 public class BeansConfig {
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 
     @Bean
     public CorsFilter corsFilter(){

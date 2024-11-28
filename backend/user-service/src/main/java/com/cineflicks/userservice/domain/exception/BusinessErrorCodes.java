@@ -10,7 +10,6 @@ import static org.springframework.http.HttpStatus.*;
 public enum BusinessErrorCodes {
 
     NO_CODE(0, NOT_IMPLEMENTED, "No code."),
-    USER_NOT_FOUND(404, NOT_FOUND, "User not found."),
 
     ;
 

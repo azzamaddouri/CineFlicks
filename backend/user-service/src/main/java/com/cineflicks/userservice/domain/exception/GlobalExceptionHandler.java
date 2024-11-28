@@ -16,14 +16,13 @@ import static org.springframework.http.HttpStatus.*;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleValidationException(MethodArgumentNotValidException exp){
+    public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp) {
         Set<String> errors = new HashSet<>();
-
-        exp.getBindingResult().getFieldErrors().forEach(error -> {
-            String fieldName = error.getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.add(fieldName + ": " + errorMessage);
-        });
+        exp.getBindingResult().getAllErrors()
+                .forEach(error -> {
+                    var errorMessage = error.getDefaultMessage();
+                    errors.add(errorMessage);
+                });
 
         return ResponseEntity
                 .status(BAD_REQUEST)
@@ -34,25 +33,36 @@ public class GlobalExceptionHandler {
                 );
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException exp) {
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleAlreadyExistsException(AlreadyExistsException ex) {
+        return ResponseEntity
+                .status(CONFLICT)
+                .body(
+                        ExceptionResponse.builder()
+                                .error(ex.getMessage())
+                                .build()
+                );
+    }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException ex) {
         return ResponseEntity
                 .status(NOT_FOUND)
                 .body(
                         ExceptionResponse.builder()
-                                .error(exp.getMessage())
+                                .error(ex.getMessage())
                                 .build()
                 );
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> handleGeneralException(Exception exp){
+    public ResponseEntity<ExceptionResponse> handleException(Exception exp) {
         log.error("Unhandled exception occurred: {}", exp.getMessage(), exp);
         return ResponseEntity
                 .status(INTERNAL_SERVER_ERROR)
                 .body(
                         ExceptionResponse.builder()
+                                .businessErrorDescription("Internal error, please contact the admin")
                                 .error(exp.getMessage())
                                 .build()
                 );

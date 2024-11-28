@@ -5,10 +5,11 @@ import com.cineflicks.userservice.adapter.outbound.persistence.mapper.UserPersis
 import com.cineflicks.userservice.adapter.outbound.persistence.repository.RoleRepository;
 import com.cineflicks.userservice.adapter.outbound.persistence.repository.UserRepository;
 import com.cineflicks.userservice.application.ports.outbound.persistence.UserPersistencePort;
+import com.cineflicks.userservice.domain.exception.AlreadyExistsException;
+import com.cineflicks.userservice.domain.exception.NotFoundException;
 import com.cineflicks.userservice.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,10 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     @Transactional
     @Override
     public User save(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new AlreadyExistsException("User already exists with email: " + user.getEmail());
+        }
+
         var userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new IllegalStateException("Role USER was not initialized."));
 
@@ -57,21 +62,21 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     public User getUserById(String id) {
         return userRepository.findById(id)
                 .map(persistenceMapper::toUser)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + id));
+                .orElseThrow(() -> new NotFoundException("User not found with ID: " + id));
     }
 
     @Override
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .map(persistenceMapper::toUser)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> new NotFoundException("User not found with email: " + email));
     }
 
     @Transactional
     @Override
     public User enable(User user) {
         var userEntity = userRepository.findById(user.getId())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + user.getId()));
+                .orElseThrow(() -> new NotFoundException("User not found with ID: " + user.getId()));
         userEntity.setEnabled(true);
         return persistenceMapper.toUser(userRepository.save(userEntity));
     }
