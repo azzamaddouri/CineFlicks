@@ -1,17 +1,35 @@
-import { Link, Stack } from 'expo-router';
-import { StyleSheet , View} from 'react-native';
+import { Stack } from "expo-router";
+import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
+import { COLORS } from "@/constants/tokens";
 
-import { ThemedText } from '@/components/ThemedText';
+export default function NotFoundPage() {
+  const router = useRouter();
 
-export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
+      <Stack.Screen
+        options={{
+          title: "404 Not Found!",
+          headerBackTitleVisible: false,
+        }}
+      />
       <View style={styles.container}>
-        <ThemedText type="title">This screen doesn't exist.</ThemedText>
-        <Link href="/" style={styles.link}>
-          <ThemedText type="link">Go to home screen!</ThemedText>
-        </Link>
+        <Text style={styles.title}>Oops! Page Not Found</Text>
+        <Image
+          style={styles.image}
+          source={require("@assets/images/page-not-found.png")}
+          alt="404"
+        />
+        <Text style={styles.message}>
+          The page you're looking for doesn't exist or has been moved.
+        </Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push("/")}
+        >
+          <Text style={styles.buttonText}>Go Back Home</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -20,12 +38,40 @@ export default function NotFoundScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+    backgroundColor: COLORS.background, 
   },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: COLORS.text,
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  image: {
+    width: "100%",
+    height: 250,
+    resizeMode: "contain",
+    marginBottom: 16,
+  },
+  message: {
+    fontSize: 16,
+    color: COLORS.text,
+    textAlign: "center",
+    marginBottom: 24,
+  },
+  button: {
+    backgroundColor: "red",
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: COLORS.text,
+    fontWeight: "bold",
+    fontSize: 18,
   },
 });

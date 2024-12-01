@@ -1,4 +1,4 @@
-export const colors = {
+export const COLORS = {
 	primary: 'red',
 	background: '#000',
 	text: '#fff',
@@ -8,13 +8,13 @@ export const colors = {
 	minimumTrackTintColor: 'rgba(255,255,255,0.6)',
 }
 
-export const fontSize = {
+export const FONT_SIZE = {
 	xs: 12,
 	sm: 16,
 	base: 20,
 	lg: 24,
 }
 
-export const screenPadding = {
+export const SCREEN_PADDING = {
 	horizontal: 24,
 }

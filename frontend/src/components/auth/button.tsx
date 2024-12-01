@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/tokens"
 import React from "react"
 import {TouchableOpacity,Text,StyleSheet,ActivityIndicator,TouchableOpacityProps} from "react-native"
 
@@ -30,7 +31,7 @@ export function Button({
 const styles = StyleSheet.create({
   button: {
     height: 50,
-    backgroundColor: "red",
+    backgroundColor: COLORS.primary,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#aa0000",
   },
   buttonText: {
-    color: "white",
+    color: COLORS.text,
     fontSize: 18,
     fontWeight: "bold",
   },

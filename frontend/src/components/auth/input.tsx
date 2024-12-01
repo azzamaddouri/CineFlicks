@@ -1,3 +1,4 @@
+import { COLORS } from "@/constants/tokens"
 import React from "react"
 import {
   StyleSheet,
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   errorText: {
-    color: "red",
+    color: COLORS.primary,
     fontSize: 14,
     marginTop: 4,
   },

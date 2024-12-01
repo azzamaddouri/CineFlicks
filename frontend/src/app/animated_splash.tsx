@@ -1,11 +1,12 @@
-import React from "react"
-import { View, Text, StyleSheet } from "react-native"
-import LottieView from "lottie-react-native"
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import LottieView from "lottie-react-native";
+import { COLORS } from "@/constants/tokens";
 
 export default function AnimatedSplashScreen({
   onAnimationFinish = () => {},
 }: {
-  onAnimationFinish: () => void
+  onAnimationFinish: () => void;
 }) {
   return (
     <View style={styles.splashContainer}>
@@ -18,13 +19,13 @@ export default function AnimatedSplashScreen({
       />
       <Text style={styles.appName}>CINEFLICKS</Text>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   splashContainer: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: COLORS.background,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -36,8 +37,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 32,
     fontWeight: "bold",
-    color: "white",
+    color: COLORS.text,
     fontFamily: "SpaceMono",
     textAlign: "center",
   },
-})
+});

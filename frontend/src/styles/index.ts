@@ -1,14 +1,14 @@
-import { colors, fontSize } from '@/constants/tokens'
+import { COLORS, FONT_SIZE } from '@/constants/tokens'
 import { StyleSheet } from 'react-native'
 
 export const defaultStyles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: colors.background,
+		backgroundColor: COLORS.background,
 	},
 	text: {
-		fontSize: fontSize.base,
-		color: colors.text,
+		fontSize: FONT_SIZE.base,
+		color: COLORS.text,
 	},
 })
 
@@ -23,13 +23,13 @@ export const utilsStyles = StyleSheet.create({
 		borderRadius: 16,
 	},
 	itemSeparator: {
-		borderColor: colors.textMuted,
+		borderColor: COLORS.textMuted,
 		borderWidth: StyleSheet.hairlineWidth,
 		opacity: 0.3,
 	},
 	emptyContentText: {
 		...defaultStyles.text,
-		color: colors.textMuted,
+		color: COLORS.textMuted,
 		textAlign: 'center',
 		marginTop: 20,
 	},

@@ -1,22 +1,21 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Tabs } from "expo-router";
 import React from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { colors, fontSize } from "@/constants/tokens";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { COLORS, FONT_SIZE } from "@/constants/tokens";
+import useUserInfo from "@/hooks/useUserInfo";
 
 export default function TabLayout() {
-  const username = "JohnDoe"; // Replace with actual username from your state/store
+  const { userInfo } = useUserInfo();
 
   return (
     <>
-
-      {/* Top Section */}
       <SafeAreaView>
         <View style={styles.topBar}>
           <View style={styles.textContainer}>
             <Text style={styles.appName}>CineFlicks</Text>
-            <Text style={styles.username}>{username}</Text>
+            <Text style={styles.username}>{userInfo?.username}</Text>
           </View>
           <View style={styles.iconContainer}>
             <TouchableOpacity style={styles.icon}>
@@ -24,7 +23,7 @@ export default function TabLayout() {
             </TouchableOpacity>
             <TouchableOpacity>
               <Image
-                source={{ uri: "https://via.placeholder.com/40" }} // Replace with user profile picture URL
+                source={{ uri: "https://via.placeholder.com/40" }}
                 style={styles.profilePicture}
               />
             </TouchableOpacity>
@@ -39,11 +38,11 @@ export default function TabLayout() {
             backgroundColor: "black",
           },
           tabBarLabelStyle: {
-            fontSize: fontSize.xs,
+            fontSize: FONT_SIZE.xs,
             color: "white",
             fontWeight: "500",
           },
-          tabBarActiveTintColor: colors.primary,
+          tabBarActiveTintColor: COLORS.primary,
           tabBarInactiveTintColor: "gray",
         }}
       >
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "black",
+    backgroundColor: COLORS.background,
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
@@ -101,13 +100,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   appName: {
-    color: "white",
-    fontSize: fontSize.lg,
+    color: COLORS.text,
+    fontSize: FONT_SIZE.lg,
     fontWeight: "700",
   },
   username: {
     color: "gray",
-    fontSize: fontSize.sm,
+    fontSize: FONT_SIZE.sm,
     fontWeight: "500",
   },
   iconContainer: {
